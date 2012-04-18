@@ -14,3 +14,5 @@
  */
  
 $GLOBALS['TL_LANG']['MOD']['boxes4ward'] = array('Inhaltsboxen','Hier können Sie Inhalte in einer Boxenstruktur verwalten.');
+
+$GLOBALS['TL_LANG']['FMD']['boxes4ward'] = array('Inhaltsbox', 'Zeigt die Inhalte einer Inhaltsbox an.');

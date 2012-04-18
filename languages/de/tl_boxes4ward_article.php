@@ -30,8 +30,10 @@ $GLOBALS['TL_LANG']['tl_boxes4ward_article']['stop']			= array('Anzeigen bis', '
  * Buttons
  */
 $GLOBALS['TL_LANG']['tl_boxes4ward_article']['new']				= array('Neue Artikel', 'Erstellen Sie eine neue Artikel im Dashboard');
-$GLOBALS['TL_LANG']['tl_boxes4ward_article']['edit']			= array('Artikel bearbeiten', 'Artikel ID %s bearbeiten');
+$GLOBALS['TL_LANG']['tl_boxes4ward_article']['edit']			= array('Inhaltselemente bearbeiten', 'Die Inhaltselemente des Artikels ID %s bearbeiten');
+$GLOBALS['TL_LANG']['tl_boxes4ward_article']['editheader']		= array('Artikel bearbeiten', 'Artikels ID %s bearbeiten');
 $GLOBALS['TL_LANG']['tl_boxes4ward_article']['copy']			= array('Artikel kopieren', 'Artikel ID %s kopieren');
+$GLOBALS['TL_LANG']['tl_boxes4ward_article']['cut']				= array('Artikel verschieben', 'Artikel ID %s verschieben');
 $GLOBALS['TL_LANG']['tl_boxes4ward_article']['delete']			= array('Artikel löschen', 'Artikel ID %s löschen');
 $GLOBALS['TL_LANG']['tl_boxes4ward_article']['show']			= array('Artikelendetails', 'Details der Artikel ID %s anzeigen');
 
