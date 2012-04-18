@@ -28,7 +28,7 @@ $GLOBALS['TL_DCA']['tl_boxes4ward_article'] = array
 		'ptable'						=> 'tl_boxes4ward_category',
 		'ctable'						=> array('tl_content'),
 		'switchToEdit'					=> true,
-		'onload_callback' 			  => array(array('tl_boxes4ward_article', 'checkPermission'))
+		'onload_callback' 			  	=> array(array('tl_boxes4ward_article', 'checkPermission'))
 	),
 
 	// List
@@ -36,10 +36,11 @@ $GLOBALS['TL_DCA']['tl_boxes4ward_article'] = array
 	(
 		'sorting' => array
 		(
-			'mode'						=> 0,
+			'mode'						=> 4,
 			'fields'					=> array('sorting'),
 			'panelLayout'				=> 'filter;search,limit',
-			'listViewSortable'			=> true,
+			'headerFields'            	=> array('name'),
+			'child_record_callback'   	=> array('tl_boxes4ward_article', 'listItem')
 		),
 		'label' => array
 		(
@@ -66,7 +67,7 @@ $GLOBALS['TL_DCA']['tl_boxes4ward_article'] = array
 			),
 			'editheader' => array
 			(
-				'label'					=> &$GLOBALS['TL_LANG']['tl_boxes4ward_category']['editheader'],
+				'label'					=> &$GLOBALS['TL_LANG']['tl_boxes4ward_article']['editheader'],
 				'href'					=> 'act=edit',
 				'icon'					=> 'header.gif'
 			),
@@ -75,6 +76,13 @@ $GLOBALS['TL_DCA']['tl_boxes4ward_article'] = array
 				'label'					=> &$GLOBALS['TL_LANG']['tl_boxes4ward_article']['copy'],
 				'href'					=> 'act=copy',
 				'icon'					=> 'copy.gif'
+			),
+			'cut' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_boxes4ward_article']['cut'],
+				'href'                => 'act=paste&amp;mode=cut',
+				'icon'                => 'cut.gif',
+				'attributes'          => 'onclick="Backend.getScrollOffset()"'
 			),
 			'delete' => array
 			(
@@ -184,6 +192,19 @@ class tl_boxes4ward_article extends System
 		parent::__construct();
 		$this->import('BackendUser', 'User');
 		$this->import('Database');
+	}
+
+
+	/**
+	 * Generate listItem
+	 * @param array
+	 * @return string
+	 */
+	public function listItem($arrRow)
+	{
+		$objModule = $this->Database->prepare('SELECT name FROM tl_module WHERE id=?')->execute($arrRow['module_id']);
+		if($objModule->numRows) $arrRow['module_id'] = $objModule->name;
+		return '<div class="">' . $arrRow['name'] . '<br><span style="color:#999;font-family:mono;">['. $arrRow['module_id'] .']</span></div>' . "\n";
 	}
 
 
