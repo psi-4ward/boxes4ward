@@ -16,7 +16,7 @@
 /**
  * Extend default palette
  */
-$GLOBALS['TL_DCA']['tl_user_group']['palettes']['default'] = str_replace('formp;', 'formp;{boxes4ward_legend},boxes4ward;', $GLOBALS['TL_DCA']['tl_user_group']['palettes']['default']);
+$GLOBALS['TL_DCA']['tl_user_group']['palettes']['default'] = str_replace('formp;', 'formp;{boxes4ward_legend},boxes4ward,boxes4ward_newp;', $GLOBALS['TL_DCA']['tl_user_group']['palettes']['default']);
 
 
 /**
@@ -28,5 +28,14 @@ $GLOBALS['TL_DCA']['tl_user_group']['fields']['boxes4ward'] = array
 	'exclude'                 => true,
 	'inputType'               => 'checkbox',
 	'foreignKey'              => 'tl_boxes4ward_category.name',
+	'eval'                    => array('multiple'=>true)
+);
+$GLOBALS['TL_DCA']['tl_user_group']['fields']['boxes4ward_newp'] = array
+(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_user_group']['boxes4ward_newp'],
+	'exclude'                 => true,
+	'inputType'               => 'checkbox',
+	'options'                 => array('create', 'delete'),
+	'reference'               => &$GLOBALS['TL_LANG']['MSC'],
 	'eval'                    => array('multiple'=>true)
 );

@@ -28,3 +28,4 @@ $GLOBALS['FE_MOD']['miscellaneous']['boxes4ward'] = 'ModuleBoxes4ward';
 
 // add news archive permissions
 $GLOBALS['TL_PERMISSIONS'][] = 'boxes4ward';
+$GLOBALS['TL_PERMISSIONS'][] = 'boxes4ward_newp';

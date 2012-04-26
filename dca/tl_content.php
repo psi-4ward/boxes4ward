@@ -25,9 +25,11 @@ if($this->Input->get('do') == 'boxes4ward')
 	// set headerFields
 	$GLOBALS['TL_DCA']['tl_content']['list']['sorting']['headerFields'] = array('name');
 	$GLOBALS['TL_DCA']['tl_content']['list']['sorting']['header_callback'] = array('tl_content_boxes4ward','generateHeader');
+	$GLOBALS['TL_DCA']['tl_content']['list']['operations']['toggle']['button_callback'] = array('tl_content_boxes4ward', 'toggleIcon');
+
 }
 
-class tl_content_boxes4ward extends Backend
+class tl_content_boxes4ward extends tl_content
 {
 
 	/**

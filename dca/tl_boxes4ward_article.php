@@ -69,7 +69,8 @@ $GLOBALS['TL_DCA']['tl_boxes4ward_article'] = array
 			(
 				'label'					=> &$GLOBALS['TL_LANG']['tl_boxes4ward_article']['editheader'],
 				'href'					=> 'act=edit',
-				'icon'					=> 'header.gif'
+				'icon'					=> 'header.gif',
+				'button_callback'     => array('tl_boxes4ward_article', 'editHeader'),
 			),
 			'copy' => array
 			(
@@ -91,12 +92,12 @@ $GLOBALS['TL_DCA']['tl_boxes4ward_article'] = array
 				'icon'					=> 'delete.gif',
 				'attributes'			=> 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"'
 			),
-		 	'toggle' => array
+			'toggle' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_boxes4ward_article']['toggle'],
 				'icon'                => 'visible.gif',
 				'attributes'          => 'onclick="Backend.getScrollOffset();return AjaxRequest.toggleVisibility(this,%s)"',
-				'button_callback'     => array('DCAHelper', 'toggleIcon')
+				'button_callback'     => array('tl_boxes4ward_article', 'toggleIcon')
 			),
 			'show' => array
 			(
@@ -181,7 +182,7 @@ $GLOBALS['TL_DCA']['tl_boxes4ward_article'] = array
 );
 
 
-class tl_boxes4ward_article extends System
+class tl_boxes4ward_article extends Backend
 {
 
 	/**
@@ -226,52 +227,129 @@ class tl_boxes4ward_article extends System
 		return $arrModuls;
 	}
 
+
 	/**
-	 * Restrict access to the boxes4ward article
-	 *
-	 * @param $dc
-	 * @return mixed
+	 * Check permissions to edit table tl_news4ward_article
 	 */
-	public function checkPermission($dc)
+	public function checkPermission()
 	{
+
 		if ($this->User->isAdmin)
 		{
+			// allow admins
 			return;
 		}
 
-		if(!is_array($this->User->boxes4ward))
+		// find tl_news4archiv.id
+		if(!$this->Input->get('act') || in_array($this->Input->get('act'),array('create','select','editAll','overrideAll')))
 		{
-			$this->log('User has no access to any boxes4ward category', 'tl_boxes4ward_category checkPermission', TL_ERROR);
+			$boxes4wardID = $this->Input->get('id');
+		}
+		else
+		{
+			$objArticle = $this->Database->prepare('SELECT pid FROM tl_boxes4ward_article WHERE id=?')->execute($this->Input->get('id'));
+			$boxes4wardID = $objArticle->pid;
+		}
+
+		if(is_array($this->User->boxes4ward) && count($this->User->boxes4ward) > 0 && in_array($boxes4wardID,$this->User->boxes4ward)) return;
+
+		$this->log('Not enough permissions to '.$this->Input->get('act').' boxes4ward category ID "'.$news4wardID.'"', 'tl_boxes4ward checkPermission', TL_ERROR);
+		$this->redirect('contao/main.php?act=error');
+	}
+
+
+	/**
+	 * Return the edit header icon
+	 * @param $row
+	 * @param $href
+	 * @param $label
+	 * @param $title
+	 * @param $icon
+	 * @param $attributes
+	 * @return string
+	 */
+	public function editHeader($row, $href, $label, $title, $icon, $attributes)
+	{
+		if (!$this->User->isAdmin && count(preg_grep('/^tl_boxes4ward_article::/', $this->User->alexf)) < 1)
+		{
+			return '';
+		}
+
+		return '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ';
+	}
+
+
+	/**
+	 * Return the "toggle visibility" button
+	 * @param array
+	 * @param string
+	 * @param string
+	 * @param string
+	 * @param string
+	 * @param string
+	 * @return string
+	 */
+	public function toggleIcon($row, $href, $label, $title, $icon, $attributes)
+	{
+		if (strlen($this->Input->get('tid')))
+		{
+			$this->toggleVisibility($this->Input->get('tid'), ($this->Input->get('state') == 1));
+			$this->redirect($this->getReferer());
+		}
+
+		// Check permissions AFTER checking the tid, so hacking attempts are logged
+		if (!$this->User->isAdmin && !$this->User->hasAccess('tl_boxes4ward_article::published', 'alexf'))
+		{
+			return '';
+		}
+
+		$href .= '&amp;tid='.$row['id'].'&amp;state='.($row['published'] ? '' : 1);
+
+		if (!$row['published'])
+		{
+			$icon = 'invisible.gif';
+		}
+
+		return '<a href="'.$this->addToUrl($href).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ';
+	}
+
+
+	/**
+	 * Disable/enable a user group
+	 * @param integer
+	 * @param boolean
+	 */
+	public function toggleVisibility($intId, $blnVisible)
+	{
+		// Check permissions to edit
+		$this->Input->setGet('id', $intId);
+		$this->Input->setGet('act', 'toggle');
+		$this->checkPermission();
+
+		// Check permissions to publish
+		if (!$this->User->isAdmin && !$this->User->hasAccess('tl_boxes4ward_article::published', 'alexf'))
+		{
+			$this->log('Not enough permissions to publish/unpublish boxes4ward_article ID "'.$intId.'"', 'tl_boxes4ward_article toggleVisibility', TL_ERROR);
 			$this->redirect('contao/main.php?act=error');
 		}
 
-		if(!$this->Input->get('act') && !in_array($this->Input->get('id'),$this->User->boxes4ward))
+		$this->createInitialVersion('tl_boxes4ward_article', $intId);
+
+		// Trigger the save_callback
+		if (is_array($GLOBALS['TL_DCA']['tl_boxes4ward_article']['fields']['published']['save_callback']))
 		{
-			$this->log('User has no access to view boxes4ward category ID:'.$this->Input->get('id'), 'tl_boxes4ward_category checkPermission', TL_ERROR);
-			$this->redirect('contao/main.php?act=error');
+			foreach ($GLOBALS['TL_DCA']['tl_boxes4ward_article']['fields']['published']['save_callback'] as $callback)
+			{
+				$this->import($callback[0]);
+				$blnVisible = $this->$callback[0]->$callback[1]($blnVisible, $this);
+			}
 		}
 
+		// Update the database
+		$this->Database->prepare("UPDATE tl_boxes4ward_article SET tstamp=". time() .", published='" . ($blnVisible ? 1 : '') . "' WHERE id=?")
+					   ->execute($intId);
 
-		if($this->Input->get('act'))
-		{
-			// get pid
-			if($this->Input->get('pid'))
-			{
-				$pid = $this->Input->get('pid');
-			}
-			else
-			{
-				$obj = $this->Database->prepare('SELECT pid FROM tl_boxes4ward_article WHERE id=?')->execute($this->Input->get('id'));
-				$pid = $obj->pid;
-
-			}
-
-			if(!in_array($pid,$this->User->boxes4ward))
-			{
-				$this->log('User has no access to view boxes4ward category ID:'.$pid, 'tl_boxes4ward_category checkPermission', TL_ERROR);
-				$this->redirect('contao/main.php?act=error');
-			}
-		}
+		$this->createNewVersion('tl_boxes4ward_article', $intId);
 	}
 
 }
