@@ -69,20 +69,20 @@ $GLOBALS['TL_DCA']['tl_boxes4ward_category'] = array
 				'href'					=> 'act=edit',
 				'icon'					=> 'header.gif'
 			),
-/* TODO: implement deep copy with articles and content-elements
 			'copy' => array
 			(
 				'label'					=> &$GLOBALS['TL_LANG']['tl_boxes4ward_category']['copy'],
 				'href'					=> 'act=copy',
-				'icon'					=> 'copy.gif'
+				'icon'					=> 'copy.gif',
+				'button_callback'     	=> array('tl_boxes4ward_category', 'copyArchive')
 			),
-			*/
 			'delete' => array
 			(
 				'label'					=> &$GLOBALS['TL_LANG']['tl_boxes4ward_category']['delete'],
 				'href'					=> 'act=delete',
 				'icon'					=> 'delete.gif',
-				'attributes'			=> 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"'
+				'attributes'			=> 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"',
+				'button_callback'     	=> array('tl_boxes4ward_category', 'deleteArchive')
 			),
 			'show' => array
 			(
@@ -154,4 +154,20 @@ class tl_boxes4ward_category extends System
 			$this->redirect('contao/main.php?act=error');
 		}
 	}
+
+
+	/**
+	 * Return the delete archive button
+	 * @param array
+	 * @param string
+	 * @param string
+	 * @param string
+	 * @param string
+	 * @param string
+	 * @return string
+	 */
+	public function deleteArchive($row, $href, $label, $title, $icon, $attributes)
+	{
+		return ($this->User->isAdmin || $this->User->hasAccess('delete', 'boxes4ward_newp')) ? '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ' : ' ';
+	}	
 }
