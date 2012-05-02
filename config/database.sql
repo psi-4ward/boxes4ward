@@ -53,6 +53,7 @@ CREATE TABLE `tl_boxes4ward_article` (
 
 CREATE TABLE `tl_user` (
   `boxes4ward` blob NULL,
+  `boxes4ward_newp` blob NULL,
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
