@@ -64,6 +64,7 @@ class ModuleBoxes4ward extends Module
 		while($objArticle->next())
 		{
 			$objArticle->pages = deserialize($objArticle->pages,true);
+			$objArticle->cssID = deserialize($objArticle->cssID,true);
 
 			// check if the boxes4ward-article should displayed on the current page
 			$pass = false;
