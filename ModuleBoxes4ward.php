@@ -61,9 +61,11 @@ class ModuleBoxes4ward extends Module
 
 		// filter articles to matching pages and generate its content elements
 		$strContent = '';
+		$intStyleCount = 1;
 		while($objArticle->next())
 		{
 			$objArticle->pages = deserialize($objArticle->pages,true);
+			$objArticle->cssID = deserialize($objArticle->cssID,true);
 
 			// check if the boxes4ward-article should displayed on the current page
 			$pass = false;
@@ -85,7 +87,27 @@ class ModuleBoxes4ward extends Module
 				continue;
 			}
 
-
+			// prepare the stlye div
+			$strID 		= $objArticle->cssID[0] != '' ? 'id="'.$objArticle->cssID[0].'"' : '';
+			$strClass 	= 'class="boxes4ward_item' . ($objArticle->cssID[1] != '' ? ' '.$objArticle->cssID[1] : '');
+			
+			if($objArticle->numRows>1)
+			{
+				switch($intStyleCount)
+				{
+					case 1:
+						$strClass .= ' first'; 
+					break;
+					case $objArticle->numRows:
+						$strClass .= ' last'; 
+					break;
+				}
+				$intStyleCount++;
+			}
+			
+			$strClass .= '"';
+			$strContent .= sprintf('<div %s %s>', $strID, $strClass);
+			
 			// fetch content elements and generate it
 			$objCte = $this->Database->prepare("SELECT id FROM tl_content WHERE pid=?" . (!BE_USER_LOGGED_IN ? " AND invisible=''" : "") . " AND do='boxes4ward' ORDER BY sorting")
 									 ->execute($objArticle->id);
@@ -94,6 +116,8 @@ class ModuleBoxes4ward extends Module
 			{
 				$strContent .= $this->getContentElement($objCte->id);
 			}
+			
+			$strContent .= '</div>';
 		}
 
 		$this->Template->content = $strContent;

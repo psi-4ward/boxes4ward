@@ -111,7 +111,7 @@ $GLOBALS['TL_DCA']['tl_boxes4ward_article'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'default'						=> '{name_legend},name,module_id;{config_legend},pages,reversePages,inheritPages;{publish_legend},published,start,stop',
+		'default'						=> '{name_legend},name,module_id;{config_legend},pages,reversePages,inheritPages;{expert_legend:hide},cssID;{publish_legend},published,start,stop',
 	),
 
 	// Fields
@@ -156,6 +156,13 @@ $GLOBALS['TL_DCA']['tl_boxes4ward_article'] = array
 			'inputType'               => 'checkbox',
 			'eval'                    => array('tl_class'=>'w50')
 		),
+		'cssID' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_boxes4ward_article']['cssID'],
+			'exclude'                 => true,
+			'inputType'               => 'text',
+			'eval'                    => array('multiple'=>true, 'size'=>2, 'tl_class'=>'w50')
+		),		
 		'published' => array
 		(
 			'label'						=> &$GLOBALS['TL_LANG']['tl_boxes4ward_article']['published'],

@@ -37,6 +37,7 @@ CREATE TABLE `tl_boxes4ward_article` (
   `pages` blob NULL,
   `inheritPages` char(1) NOT NULL default '',
   `reversePages` char(1) NOT NULL default '',
+  `cssID` varchar(255) NOT NULL default '',
   `start` varchar(10) NOT NULL default '',
   `stop` varchar(10) NOT NULL default '',
   `published` char(1) NOT NULL default '1',
