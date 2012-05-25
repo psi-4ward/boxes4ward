@@ -61,6 +61,7 @@ class ModuleBoxes4ward extends Module
 
 		// filter articles to matching pages and generate its content elements
 		$strContent = '';
+		$intStyleCount = 1;
 		while($objArticle->next())
 		{
 			$objArticle->pages = deserialize($objArticle->pages,true);
@@ -86,14 +87,26 @@ class ModuleBoxes4ward extends Module
 				continue;
 			}
 
-			// add div with css id / class
-			if(strlen($objArticle->cssID[0]) || strlen($objArticle->cssID[1]))
+			// prepare the stlye div
+			$strID 		= $objArticle->cssID[0] != '' ? 'id="'.$objArticle->cssID[0].'"' : '';
+			$strClass 	= 'class="boxes4ward_item' . ($objArticle->cssID[1] != '' ? ' '.$objArticle->cssID[1] : '');
+			
+			if($objArticle->numRows>1)
 			{
-				$strContent .= '<div';
-				$objArticle->cssID[0] != '' ? $strContent .= ' id="'.$objArticle->cssID[0].'"' : '';
-				$objArticle->cssID[1] != '' ? $strContent .= ' class="ce_article '.$objArticle->cssID[1].'"' : '';
-				$strContent .= '>';
+				switch($intStyleCount)
+				{
+					case 1:
+						$strClass .= ' first'; 
+					break;
+					case $objArticle->numRows:
+						$strClass .= ' last'; 
+					break;
+				}
+				$intStyleCount++;
 			}
+			
+			$strClass .= '"';
+			$strContent .= sprintf('<div %s %s>', $strID, $strClass);
 			
 			// fetch content elements and generate it
 			$objCte = $this->Database->prepare("SELECT id FROM tl_content WHERE pid=?" . (!BE_USER_LOGGED_IN ? " AND invisible=''" : "") . " AND do='boxes4ward' ORDER BY sorting")
@@ -104,10 +117,7 @@ class ModuleBoxes4ward extends Module
 				$strContent .= $this->getContentElement($objCte->id);
 			}
 			
-			if(strlen($objArticle->cssID[0]) || strlen($objArticle->cssID[1]))
-			{
-				$strContent .= '</div>';
-			}			
+			$strContent .= '</div>';
 		}
 
 		$this->Template->content = $strContent;
