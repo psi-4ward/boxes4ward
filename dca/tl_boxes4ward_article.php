@@ -28,7 +28,15 @@ $GLOBALS['TL_DCA']['tl_boxes4ward_article'] = array
 		'ptable'						=> 'tl_boxes4ward_category',
 		'ctable'						=> array('tl_content'),
 		'switchToEdit'					=> true,
-		'onload_callback' 			  	=> array(array('tl_boxes4ward_article', 'checkPermission'))
+		'onload_callback' 			  	=> array(array('tl_boxes4ward_article', 'checkPermission')),
+		'sql' => array
+		(
+			'keys' => array
+			(
+				'id' => 'primary',
+				'pid' => 'index',
+			)
+		)
 	),
 
 	// List
@@ -117,6 +125,24 @@ $GLOBALS['TL_DCA']['tl_boxes4ward_article'] = array
 	// Fields
 	'fields' => array
 	(
+		'id' => array
+		(
+			'sql'                     => "int(10) unsigned NOT NULL auto_increment"
+		),
+		'pid' => array
+		(
+			'foreignKey'              => 'tl_boxes4ward_category.name',
+			'sql'                     => "int(10) unsigned NOT NULL default '0'",
+			'relation'                => array('type'=>'belongsTo', 'load'=>'eager')
+		),
+		'tstamp' => array
+		(
+			'sql'                     => "int(10) unsigned NOT NULL default '0'"
+		),
+		'sorting' => array
+		(
+			'sql'                     => "int(10) unsigned NOT NULL default '0'"
+		),
 		'name' => array
 		(
 			'label'						=> &$GLOBALS['TL_LANG']['tl_boxes4ward_article']['name'],
@@ -124,12 +150,14 @@ $GLOBALS['TL_DCA']['tl_boxes4ward_article'] = array
 			'inputType'					=> 'text',
 			'search'					=> true,
 			'eval'						=> array('mandatory'=>true, 'maxlength'=>255, 'tl_class'=>'w50'),
+			'sql'						=> "varchar(255) NOT NULL default ''"
 		),
 		'pages' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_boxes4ward_article']['pages'],
 			'inputType'               => 'pageTree',
-			'eval'                    => array("multiple"=>true, 'fieldType'=>'checkbox')
+			'eval'                    => array("multiple"=>true, 'fieldType'=>'checkbox'),
+			'sql'					  => 'blob NULL'
 		),
 		'module_id' => array
 		(
@@ -138,7 +166,8 @@ $GLOBALS['TL_DCA']['tl_boxes4ward_article'] = array
 			'inputType'               => 'select',
 			'filter'                  => true,
 			'options_callback'        => array('tl_boxes4ward_article', 'getModules'),
-			'eval'                    => array('helpwizard'=>true, 'tl_class'=>'w50')
+			'eval'                    => array('helpwizard'=>true, 'tl_class'=>'w50'),
+			'sql'					  => "int(10) unsigned NOT NULL default '0'"
 		),
 		'reversePages' => array
 		(
@@ -146,7 +175,8 @@ $GLOBALS['TL_DCA']['tl_boxes4ward_article'] = array
 			'exclude'                 => true,
 			'filter'				  => true,
 			'inputType'               => 'checkbox',
-			'eval'                    => array('tl_class'=>'w50')
+			'eval'                    => array('tl_class'=>'w50'),
+			'sql'					  => "char(1) NOT NULL default ''"
 		),
 		'inheritPages' => array
 		(
@@ -154,7 +184,8 @@ $GLOBALS['TL_DCA']['tl_boxes4ward_article'] = array
 			'exclude'                 => true,
 			'filter'				  => true,
 			'inputType'               => 'checkbox',
-			'eval'                    => array('tl_class'=>'w50')
+			'eval'                    => array('tl_class'=>'w50'),
+			'sql'					  => "char(1) NOT NULL default ''"
 		),
 		'published' => array
 		(
@@ -163,20 +194,23 @@ $GLOBALS['TL_DCA']['tl_boxes4ward_article'] = array
 			'filter'					=> true,
 			'inputType'					=> 'checkbox',
 			'eval'						=> array('doNotCopy'=>true),
+			'sql'					  => "char(1) NOT NULL default ''"
 		),
 		'start' => array
 		(
 			'exclude'                 => true,
 			'label'                   => &$GLOBALS['TL_LANG']['tl_boxes4ward_article']['start'],
 			'inputType'               => 'text',
-			'eval'                    => array('rgxp'=>'datim', 'datepicker'=>true, 'tl_class'=>'w50 wizard')
+			'eval'                    => array('rgxp'=>'datim', 'datepicker'=>true, 'tl_class'=>'w50 wizard'),
+			'sql'					  => "varchar(10) NOT NULL default ''"
 		),
 		'stop' => array
 		(
 			'exclude'                 => true,
 			'label'                   => &$GLOBALS['TL_LANG']['tl_boxes4ward_article']['stop'],
 			'inputType'               => 'text',
-			'eval'                    => array('rgxp'=>'datim', 'datepicker'=>true, 'tl_class'=>'w50 wizard')
+			'eval'                    => array('rgxp'=>'datim', 'datepicker'=>true, 'tl_class'=>'w50 wizard'),
+			'sql'					  => "varchar(10) NOT NULL default ''"
 		)
 	)
 );
@@ -217,7 +251,7 @@ class tl_boxes4ward_article extends Backend
 	public function getModules()
 	{
 		$arrModuls = array();
-		$objModuls = $this->Database->prepare("SELECT * FROM tl_module WHERE type=?")->execute("boxes4ward");
+		$objModuls = \ModuleModel::findBy('type','boxes4ward');
 
 		while($objModuls->next())
 		{
@@ -241,19 +275,19 @@ class tl_boxes4ward_article extends Backend
 		}
 
 		// find tl_news4archiv.id
-		if(!$this->Input->get('act') || in_array($this->Input->get('act'),array('create','select','editAll','overrideAll')))
+		if(!Input::get('act') || in_array(Input::get('act'),array('create','select','editAll','overrideAll')))
 		{
-			$boxes4wardID = $this->Input->get('id');
+			$boxes4wardID = Input::get('id');
 		}
 		else
 		{
-			$objArticle = $this->Database->prepare('SELECT pid FROM tl_boxes4ward_article WHERE id=?')->execute($this->Input->get('id'));
+			$objArticle = \Contao\ArticleModel::findByPk(\Contao\Input::get('id'));
 			$boxes4wardID = $objArticle->pid;
 		}
 
 		if(is_array($this->User->boxes4ward) && count($this->User->boxes4ward) > 0 && in_array($boxes4wardID,$this->User->boxes4ward)) return;
 
-		$this->log('Not enough permissions to '.$this->Input->get('act').' boxes4ward category ID "'.$news4wardID.'"', 'tl_boxes4ward checkPermission', TL_ERROR);
+		$this->log('Not enough permissions to '.Input::get('act').' boxes4ward category ID "'.$news4wardID.'"', 'tl_boxes4ward_article checkPermission', TL_ERROR);
 		$this->redirect('contao/main.php?act=error');
 	}
 
@@ -291,9 +325,9 @@ class tl_boxes4ward_article extends Backend
 	 */
 	public function toggleIcon($row, $href, $label, $title, $icon, $attributes)
 	{
-		if (strlen($this->Input->get('tid')))
+		if (strlen(Input::get('tid')))
 		{
-			$this->toggleVisibility($this->Input->get('tid'), ($this->Input->get('state') == 1));
+			$this->toggleVisibility(Input::get('tid'), (Input::get('state') == 1));
 			$this->redirect($this->getReferer());
 		}
 
@@ -322,8 +356,8 @@ class tl_boxes4ward_article extends Backend
 	public function toggleVisibility($intId, $blnVisible)
 	{
 		// Check permissions to edit
-		$this->Input->setGet('id', $intId);
-		$this->Input->setGet('act', 'toggle');
+		Input::setGet('id', $intId);
+		Input::setGet('act', 'toggle');
 		$this->checkPermission();
 
 		// Check permissions to publish
@@ -346,8 +380,9 @@ class tl_boxes4ward_article extends Backend
 		}
 
 		// Update the database
-		$this->Database->prepare("UPDATE tl_boxes4ward_article SET tstamp=". time() .", published='" . ($blnVisible ? 1 : '') . "' WHERE id=?")
-					   ->execute($intId);
+		$objArticle = \Boxes4ward\Boxes4wardArticleModel::findByPk($intId);
+		$objArticle->published = ($blnVisible ? '1' : '');
+		$objArticle->save();
 
 		$this->createNewVersion('tl_boxes4ward_article', $intId);
 	}

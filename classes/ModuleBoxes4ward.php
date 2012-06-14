@@ -1,4 +1,7 @@
-<?php if (!defined('TL_ROOT')) die('You cannot access this file directly!');
+<?php
+namespace Boxes4ward;
+
+if (!defined('TL_ROOT')) die('You cannot access this file directly!');
 
 
 /**

@@ -16,8 +16,8 @@
 
 // BE-Module
 $GLOBALS['BE_MOD']['content']['boxes4ward'] = array(
-	'tables'  => array('tl_boxes4ward_category','tl_boxes4ward_article','tl_content'),
-	'icon'    => 'system/modules/boxes4ward/html/icon.png'
+	'tables'  		=> array('tl_boxes4ward_category','tl_boxes4ward_article','tl_content'),
+	'icon'    		=> 'system/modules/boxes4ward/html/icon.png'
 );
 
 
