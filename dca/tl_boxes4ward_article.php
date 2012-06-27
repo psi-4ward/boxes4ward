@@ -192,7 +192,8 @@ $GLOBALS['TL_DCA']['tl_boxes4ward_article'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_boxes4ward_article']['cssID'],
 			'exclude'                 => true,
 			'inputType'               => 'text',
-			'eval'                    => array('multiple'=>true, 'size'=>2, 'tl_class'=>'w50')
+			'eval'                    => array('multiple'=>true, 'size'=>2, 'tl_class'=>'w50'),
+			'sql'					  => "varchar(255) NOT NULL default ''"
 		),		
 		'published' => array
 		(
@@ -260,6 +261,8 @@ class tl_boxes4ward_article extends Backend
 		$arrModuls = array();
 		$objModuls = \ModuleModel::findBy('type','boxes4ward');
 
+		if(!$objModuls->numRows) return array();
+
 		while($objModuls->next())
 		{
 			$arrModuls[$objModuls->id] = $objModuls->name;
@@ -285,16 +288,17 @@ class tl_boxes4ward_article extends Backend
 		if(!Input::get('act') || in_array(Input::get('act'),array('create','select','editAll','overrideAll')))
 		{
 			$boxes4wardID = Input::get('id');
+
 		}
 		else
 		{
-			$objArticle = \Contao\ArticleModel::findByPk(\Contao\Input::get('id'));
+			$objArticle = \Contao\ArticleModel::findByPk(Input::get('id'));
 			$boxes4wardID = $objArticle->pid;
 		}
 
 		if(is_array($this->User->boxes4ward) && count($this->User->boxes4ward) > 0 && in_array($boxes4wardID,$this->User->boxes4ward)) return;
 
-		$this->log('Not enough permissions to '.Input::get('act').' boxes4ward category ID "'.$news4wardID.'"', 'tl_boxes4ward_article checkPermission', TL_ERROR);
+		$this->log('Not enough permissions to '.Input::get('act').' boxes4ward category ID "'.$boxes4wardID.'"', 'tl_boxes4ward_article checkPermission', TL_ERROR);
 		$this->redirect('contao/main.php?act=error');
 	}
 

@@ -27,7 +27,14 @@ $GLOBALS['TL_DCA']['tl_boxes4ward_category'] = array
 		'enableVersioning'				=> true,
 		'ctable'						=> array('tl_boxes4ward_article'),
 		'switchToEdit'					=> true,
-		'onload_callback' 				=> array(array('tl_boxes4ward_category', 'checkPermission'))
+		'onload_callback' 				=> array(array('tl_boxes4ward_category', 'checkPermission')),
+		'sql' => array
+		(
+			'keys' => array
+			(
+				'id' => 'primary',
+			)
+		)
 	),
 
 	// List
@@ -102,12 +109,21 @@ $GLOBALS['TL_DCA']['tl_boxes4ward_category'] = array
 	// Fields
 	'fields' => array
 	(
+		'id' => array
+		(
+			'sql'						=> "int(10) unsigned NOT NULL auto_increment"
+		),
+		'tstamp' => array
+		(
+			'sql'						=> "int(10) unsigned NOT NULL default '0'"
+		),
 		'name' => array
 		(
 			'label'						=> &$GLOBALS['TL_LANG']['tl_boxes4ward_category']['name'],
 			'exclude'					=> true,
 			'inputType'					=> 'text',
 			'eval'						=> array('mandatory'=>true, 'maxlength'=>255, 'tl_class'=>'w50'),
+			'sql'						=> "varchar(255) NOT NULL default ''"
 		),
 	)
 );

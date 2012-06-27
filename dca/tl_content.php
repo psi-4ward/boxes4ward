@@ -1,7 +1,4 @@
-<?php if(!defined('TL_ROOT')) {
-	die('You cannot access this file directly!');
-}
-
+<?php if(!defined('TL_ROOT')) die('You cannot access this file directly!');
 
 /**
  * Boxes4ward
@@ -15,14 +12,14 @@
  * @see https://github.com/psi-4ward/boxes4ward
  */
 
-// tl_content needs the dynamicPtable to use GlobalContentelements of Contao3
-$GLOBALS['TL_DCA']['tl_content']['config']['dynamicPtable']['boxes4ward'] = array('tl_boxes4ward_article', array('tl_content_boxes4ward', 'checkContentPermission'));
 
-
-// we just use another tl_content header
 if(Input::get('do') == 'boxes4ward')
 {
-	// set headerFields
+	// Dynamically add the permission check and parent table
+	$GLOBALS['TL_DCA']['tl_content']['config']['ptable'] = 'tl_boxes4ward_article';
+	$GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'][] = array('tl_content_boxes4ward', 'checkPermission');
+
+	// we just use another tl_content header
 	$GLOBALS['TL_DCA']['tl_content']['list']['sorting']['headerFields'] = array('name');
 	$GLOBALS['TL_DCA']['tl_content']['list']['sorting']['header_callback'] = array('tl_content_boxes4ward','generateHeader');
 
@@ -75,10 +72,10 @@ class tl_content_boxes4ward extends tl_content
 
 
 		if(Input::get('act'))
-				{
-					$articleID = $this->Database->prepare('SELECT pid FROM tl_content WHERE id=?')
-						->execute(Input::get('id'))->pid;
-				}
+		{
+			$articleID = $this->Database->prepare('SELECT pid FROM tl_content WHERE id=?')
+				->execute(Input::get('id'))->pid;
+		}
 		else
 		{
 			$articleID = Input::get('id');
