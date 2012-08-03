@@ -60,8 +60,7 @@ class ModuleBoxes4ward extends Module
 		if(!$objArticle->numRows) return;
 
 		// filter articles to matching pages and generate its content elements
-		$strContent = '';
-		$intCounter = 1;
+		$arrArticles = array();
 		while($objArticle->next())
 		{
 			$objArticle->pages = deserialize($objArticle->pages,true);
@@ -86,25 +85,33 @@ class ModuleBoxes4ward extends Module
 				continue;
 			}
 
+			$arrArticles[] = $objArticle->row();
+		}
+
+		// generate the articles
+		$strContent = '';
+		$intNumRows = count($arrArticles);
+		foreach($arrArticles as $intCounter => $arrArticle)
+		{
 			// generate css classes (first,last,even,odd)
-			$objArticle->cssID = deserialize($objArticle->cssID);
+			$arrArticle['cssID'] = deserialize($arrArticle['cssID']);
 			$class = 'boxes4ward_article';
-			$class .= ($intCounter == 1) ? ' first' : '';
-			$class .= ($intCounter == $objArticle->numRows) ? ' last' : '';
+			$class .= ($intCounter == 0) ? ' first' : '';
+			$class .= ($intCounter == $intNumRows-1) ? ' last' : '';
 			$class .= ($intCounter%2) ? ' odd' : ' even';
 
 			// take the id/class from the article-attributes
 			$id = '';
-			if($objArticle->cssID)
+			if($arrArticle['cssID'])
 			{
-				if(strlen($objArticle->cssID[0]))
+				if(strlen($arrArticle['cssID'][0]))
 				{
-					$id = ' id="'.$objArticle->cssID[0].'"';
+					$id = ' id="'.$arrArticle['cssID'][0].'"';
 				}
 
-				if(strlen($objArticle->cssID[1]))
+				if(strlen($arrArticle['cssID'][1]))
 				{
-					$class .= ' '.$objArticle->cssID[1];
+					$class .= ' '.$arrArticle['cssID'][1];
 				}
 			}
 
@@ -113,7 +120,7 @@ class ModuleBoxes4ward extends Module
 
 			// fetch content elements and generate it
 			$objCte = $this->Database->prepare("SELECT id FROM tl_content WHERE pid=?" . (!BE_USER_LOGGED_IN ? " AND invisible=''" : "") . " AND do='boxes4ward' ORDER BY sorting")
-									 ->execute($objArticle->id);
+									 ->execute($arrArticle['id']);
 
 			while ($objCte->next())
 			{
@@ -122,7 +129,6 @@ class ModuleBoxes4ward extends Module
 			
 			$strContent .= '</div>';
 
-			$intCounter++;
 		}
 
 		$this->Template->content = $strContent;
