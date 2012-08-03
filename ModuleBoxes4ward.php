@@ -85,6 +85,18 @@ class ModuleBoxes4ward extends Module
 				continue;
 			}
 
+			// check for month-filter
+			if($objArticle->monthFilter && !(($monthes = deserialize($objArticle->monthes)) && in_array(date('n')-1,$monthes)))
+			{
+				continue;
+			}
+
+			// check for month-filter
+			if($objArticle->weekdayFilter && !(($days = deserialize($objArticle->weekdays)) && in_array(date('w'),$days)))
+			{
+				continue;
+			}
+
 			$arrArticles[] = $objArticle->row();
 		}
 

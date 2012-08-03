@@ -111,7 +111,15 @@ $GLOBALS['TL_DCA']['tl_boxes4ward_article'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'default'						=> '{name_legend},name,module_id;{config_legend},pages,reversePages,inheritPages;{expert_legend:hide},cssID;{publish_legend},published,start,stop',
+		'__selector__'					=> array('weekdayFilter','monthFilter'),
+		'default'						=> '{name_legend},name,module_id;{config_legend},pages,reversePages,inheritPages;{weekday_legend:hide},weekdayFilter;{month_legend:hide},monthFilter;{expert_legend:hide},cssID;{publish_legend},published,start,stop',
+	),
+
+	// Subpalettes
+	'subpalettes' => array
+	(
+		'weekdayFilter'					=> 'weekdays',
+		'monthFilter'					=> 'monthes',
 	),
 
 	// Fields
@@ -155,6 +163,40 @@ $GLOBALS['TL_DCA']['tl_boxes4ward_article'] = array
 			'filter'				  => true,
 			'inputType'               => 'checkbox',
 			'eval'                    => array('tl_class'=>'w50')
+		),
+		'weekdayFilter' => array
+		(
+			'label'						=> &$GLOBALS['TL_LANG']['tl_boxes4ward_article']['weekdayFilter'],
+			'exclude'					=> true,
+			'filter'					=> true,
+			'inputType'					=> 'checkbox',
+			'eval'						=> array('submitOnChange'=>true),
+		),
+		'weekdays' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_boxes4ward_article']['weekdays'],
+			'exclude'                 => true,
+			'options'				  => array('1','2','3','4','5','6','0'),
+			'reference'				  => $GLOBALS['TL_LANG']['DAYS'],
+			'inputType'               => 'checkbox',
+			'eval'                    => array('multiple'=>true)
+		),
+		'monthFilter' => array
+		(
+			'label'						=> &$GLOBALS['TL_LANG']['tl_boxes4ward_article']['monthFilter'],
+			'exclude'					=> true,
+			'filter'					=> true,
+			'inputType'					=> 'checkbox',
+			'eval'						=> array('submitOnChange'=>true),
+		),
+		'monthes' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_boxes4ward_article']['monthes'],
+			'exclude'                 => true,
+			'options'				  => array('0','1','2','3','4','5','6','7','8','9','10','11'),
+			'reference'				  => $GLOBALS['TL_LANG']['MONTHS'],
+			'inputType'               => 'checkbox',
+			'eval'                    => array('multiple'=>true)
 		),
 		'cssID' => array
 		(

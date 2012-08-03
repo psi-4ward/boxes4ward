@@ -21,6 +21,10 @@ $GLOBALS['TL_LANG']['tl_boxes4ward_article']['module_id']		= array('Modul', 'Der
 $GLOBALS['TL_LANG']['tl_boxes4ward_article']['pages']			= array('Seiten', 'Auf diesen Seiten wird die Box angezeigt.');
 $GLOBALS['TL_LANG']['tl_boxes4ward_article']['reversePages']	= array('Seitenauswahl-Logik umkehren', 'Ausgewählte Seiten werden *nicht* angezeigt. Auswahl hier und keine der Seiten aktiv ist gleichbedeutend mit "alle Seiten".');
 $GLOBALS['TL_LANG']['tl_boxes4ward_article']['inheritPages']	= array('Unterseiten wählen', 'Die Box wird zusätzlich auf allen Unterseiten angezeigt.');
+$GLOBALS['TL_LANG']['tl_boxes4ward_article']['weekdayFilter']	= array('Auf Wochentage beschränken', 'Die Box wird nur an den gewählten Wochentagen angezeigt.');
+$GLOBALS['TL_LANG']['tl_boxes4ward_article']['weekdays']		= array('Wochentage', 'Wählen Sie hier die Wochentage aus, an denen die Box angezeigt werden soll.');
+$GLOBALS['TL_LANG']['tl_boxes4ward_article']['monthFilter']		= array('Auf Monate beschränken', 'Die Box wird nur während der gewählten Monate angezeigt.');
+$GLOBALS['TL_LANG']['tl_boxes4ward_article']['monthes']			= array('Monate', 'Wählen Sie hier die Monate aus, an denen die Box angezeigt werden soll.');
 $GLOBALS['TL_LANG']['tl_boxes4ward_article']['cssID']         	= array('CSS-ID/Klasse', 'Hier können Sie eine ID und beliebig viele Klassen eingeben.');
 $GLOBALS['TL_LANG']['tl_boxes4ward_article']['published']		= array('Artikel veröffentlichen', 'Den Artikel auf der Webseite anzeigen.');
 $GLOBALS['TL_LANG']['tl_boxes4ward_article']['start']			= array('Anzeigen ab', 'Den Artikel erst ab diesem Tag auf der Webseite anzeigen.');
@@ -45,6 +49,8 @@ $GLOBALS['TL_LANG']['tl_boxes4ward_article']['show']			= array('Artikelendetails
  */
 $GLOBALS['TL_LANG']['tl_boxes4ward_article']['name_legend']		= 'Name';
 $GLOBALS['TL_LANG']['tl_boxes4ward_article']['config_legend']	= 'Einstellungen';
-$GLOBALS['TL_LANG']['tl_boxes4ward_article']['expert_legend']    = 'Experten-Einstellungen';
+$GLOBALS['TL_LANG']['tl_boxes4ward_article']['weekday_legend']		= 'Auf Wochentage beschränken';
+$GLOBALS['TL_LANG']['tl_boxes4ward_article']['month_legend']	= 'Auf Monate beschränken';
+$GLOBALS['TL_LANG']['tl_boxes4ward_article']['expert_legend']   = 'Experten-Einstellungen';
 $GLOBALS['TL_LANG']['tl_boxes4ward_article']['publish_legend']	= 'Veröffentlichung';
 
