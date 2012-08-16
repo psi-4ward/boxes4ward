@@ -127,19 +127,23 @@ class ModuleBoxes4ward extends Module
 				}
 			}
 
-			// add a div holding css id / classes
-			$strContent .= sprintf('<div%s class="%s">',$id,$class);
-
 			// fetch content elements and generate it
 			$objCte = $this->Database->prepare("SELECT id FROM tl_content WHERE pid=?" . (!BE_USER_LOGGED_IN ? " AND invisible=''" : "") . " AND do='boxes4ward' ORDER BY sorting")
 									 ->execute($arrArticle['id']);
 
+		    	$strContentTemp = '';
 			while ($objCte->next())
 			{
-				$strContent .= $this->getContentElement($objCte->id);
+				$strContentTemp .= $this->getContentElement($objCte->id);
 			}
-			
-			$strContent .= '</div>';
+
+			if(strlen($strContentTemp))
+			{
+				// add a div holding css id / classes
+				$strContent .= sprintf('<div%s class="%s">',$id,$class);
+				$strContent .= $strContentTemp;
+				$strContent .= '</div>';
+			}
 
 		}
 
