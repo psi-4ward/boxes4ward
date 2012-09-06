@@ -28,7 +28,8 @@ $GLOBALS['TL_DCA']['tl_boxes4ward_article'] = array
 		'ptable'						=> 'tl_boxes4ward_category',
 		'ctable'						=> array('tl_content'),
 		'switchToEdit'					=> true,
-		'onload_callback' 			  	=> array(array('tl_boxes4ward_article', 'checkPermission'))
+		'onload_callback' 			  	=> array(array('tl_boxes4ward_article', 'checkPermission')),
+		'ondelete_callback'			  	=> array(array('GlobalContentelements', 'deleteChildRecords'))
 	),
 
 	// List
