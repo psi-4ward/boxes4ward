@@ -1,4 +1,5 @@
-<?php if (!defined('TL_ROOT')) die('You cannot access this file directly!');
+<?php
+namespace Psi\Boxes4ward\Module;
 
 
 /**
@@ -14,7 +15,7 @@
  */
 
 
-class ModuleBoxes4ward extends Module
+class Boxes4ward extends \Module
 {
 
 	/**
@@ -24,7 +25,7 @@ class ModuleBoxes4ward extends Module
 	protected $strTemplate = 'mod_boxes4ward';
 
 
-		public function generate()
+	public function generate()
 	{
 		if (TL_MODE == 'BE')
 		{
@@ -131,7 +132,7 @@ class ModuleBoxes4ward extends Module
 			$strContent .= sprintf('<div%s class="%s">',$id,$class);
 
 			// fetch content elements and generate it
-			$objCte = $this->Database->prepare("SELECT id FROM tl_content WHERE pid=?" . (!BE_USER_LOGGED_IN ? " AND invisible=''" : "") . " AND do='boxes4ward' ORDER BY sorting")
+			$objCte = $this->Database->prepare("SELECT id FROM tl_content WHERE pid=?" . (!BE_USER_LOGGED_IN ? " AND invisible=''" : "") . " AND ptable='tl_boxes4ward_article' ORDER BY sorting")
 									 ->execute($arrArticle['id']);
 
 			while ($objCte->next())

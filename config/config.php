@@ -1,5 +1,4 @@
-<?php if (!defined('TL_ROOT')) die('You cannot access this file directly!');
-
+<?php
 
 /**
  * Boxes4ward
@@ -16,14 +15,13 @@
 
 // BE-Module
 $GLOBALS['BE_MOD']['content']['boxes4ward'] = array(
-	'tables'  => array('tl_boxes4ward_category','tl_boxes4ward_article','tl_content'),
-	'icon'    => 'system/modules/boxes4ward/html/icon.png'
+	'tables'  		=> array('tl_boxes4ward_category','tl_boxes4ward_article','tl_content'),
+	'icon'    		=> 'system/modules/boxes4ward/html/icon.png'
 );
 
 
-
 // FE-Modules
-$GLOBALS['FE_MOD']['miscellaneous']['boxes4ward'] = 'ModuleBoxes4ward';
+$GLOBALS['FE_MOD']['miscellaneous']['boxes4ward'] = 'Boxes4ward\Module\Boxes4ward';
 
 
 // add news archive permissions

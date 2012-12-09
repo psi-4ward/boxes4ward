@@ -1,5 +1,4 @@
-<?php if (!defined('TL_ROOT')) die('You cannot access this file directly!');
-
+<?php if(!defined('TL_ROOT')) die('You cannot access this file directly!');
 
 /**
  * Boxes4ward
@@ -14,21 +13,22 @@
  */
 
 
-// GlobalContentelements switch
-if($this->Input->get('do') == 'boxes4ward')
+if(Input::get('do') == 'boxes4ward')
 {
+	// Dynamically add the permission check and parent table
 	$GLOBALS['TL_DCA']['tl_content']['config']['ptable'] = 'tl_boxes4ward_article';
-	
-	// set news4wards checkPermissions function
 	$GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'][] = array('tl_content_boxes4ward', 'checkPermission');
 
-	// set headerFields
+	// we just use another tl_content header
 	$GLOBALS['TL_DCA']['tl_content']['list']['sorting']['headerFields'] = array('name');
 	$GLOBALS['TL_DCA']['tl_content']['list']['sorting']['header_callback'] = array('tl_content_boxes4ward','generateHeader');
-	$GLOBALS['TL_DCA']['tl_content']['list']['operations']['toggle']['button_callback'] = array('tl_content_boxes4ward', 'toggleIcon');
 
 }
 
+/**
+ * Class tl_content_boxes4ward
+ * provides some some helper methods
+ */
 class tl_content_boxes4ward extends tl_content
 {
 
@@ -70,18 +70,23 @@ class tl_content_boxes4ward extends tl_content
 			return;
 		}
 
-		
-		if($this->Input->get('act'))
-			$articleID = $this->Database->prepare('SELECT pid FROM tl_content WHERE id=?')->execute($this->Input->get('id'))->pid;
+
+		if(Input::get('act'))
+		{
+			$articleID = $this->Database->prepare('SELECT pid FROM tl_content WHERE id=?')
+				->execute(Input::get('id'))->pid;
+		}
 		else
-			$articleID = $this->Input->get('id');
+		{
+			$articleID = Input::get('id');
+		}
 
 
 		// get archive id
 		$objArchive = $this->Database->prepare('SELECT pid FROM tl_boxes4ward_article WHERE id=?')->execute($articleID);
 		if($objArchive->numRows < 1 || !is_array($this->User->boxes4ward) || !in_array($objArchive->pid,$this->User->boxes4ward))
 		{
-			$this->log('Not enough permissions to '.$this->Input->get('act').' boxes4ward contentelement ID "'.$this->Input->get('id').'"', 'tl_content_boxes4ward checkPermission', TL_ERROR);
+			$this->log('Not enough permissions to '.Input::get('act').' boxes4ward contentelement ID "'.Input::get('id').'"', 'tl_content_boxes4ward checkPermission', TL_ERROR);
 			$this->redirect('contao/main.php?act=error');
 		}
 		
