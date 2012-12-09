@@ -1,4 +1,4 @@
-<?php if (!defined('TL_ROOT')) die('You cannot access this file directly!');
+<?php
 
 
 /**
@@ -119,7 +119,15 @@ $GLOBALS['TL_DCA']['tl_boxes4ward_article'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'default'						=> '{name_legend},name,module_id;{config_legend},pages,reversePages,inheritPages;{expert_legend:hide},cssID;{publish_legend},published,start,stop',
+		'__selector__'					=> array('weekdayFilter','monthFilter'),
+		'default'						=> '{name_legend},name,module_id;{config_legend},pages,reversePages,inheritPages;{weekday_legend:hide},weekdayFilter;{month_legend:hide},monthFilter;{expert_legend:hide},cssID;{publish_legend},published,start,stop',
+	),
+
+	// Subpalettes
+	'subpalettes' => array
+	(
+		'weekdayFilter'					=> 'weekdays',
+		'monthFilter'					=> 'monthes',
 	),
 
 	// Fields
@@ -186,6 +194,44 @@ $GLOBALS['TL_DCA']['tl_boxes4ward_article'] = array
 			'inputType'               => 'checkbox',
 			'eval'                    => array('tl_class'=>'w50'),
 			'sql'					  => "char(1) NOT NULL default ''"
+		),
+		'weekdayFilter' => array
+		(
+			'label'						=> &$GLOBALS['TL_LANG']['tl_boxes4ward_article']['weekdayFilter'],
+			'exclude'					=> true,
+			'filter'					=> true,
+			'inputType'					=> 'checkbox',
+			'eval'						=> array('submitOnChange'=>true),
+			'sql'					  => "char(1) NOT NULL default ''"
+		),
+		'weekdays' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_boxes4ward_article']['weekdays'],
+			'exclude'                 => true,
+			'options'				  => array('1','2','3','4','5','6','0'),
+			'reference'				  => $GLOBALS['TL_LANG']['DAYS'],
+			'inputType'               => 'checkbox',
+			'eval'                    => array('multiple'=>true),
+			'sql'					  => "blob NULL"
+		),
+		'monthFilter' => array
+		(
+			'label'						=> &$GLOBALS['TL_LANG']['tl_boxes4ward_article']['monthFilter'],
+			'exclude'					=> true,
+			'filter'					=> true,
+			'inputType'					=> 'checkbox',
+			'eval'						=> array('submitOnChange'=>true),
+			'sql'					  => "char(1) NOT NULL default ''"
+		),
+		'monthes' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_boxes4ward_article']['monthes'],
+			'exclude'                 => true,
+			'options'				  => array('0','1','2','3','4','5','6','7','8','9','10','11'),
+			'reference'				  => $GLOBALS['TL_LANG']['MONTHS'],
+			'inputType'               => 'checkbox',
+			'eval'                    => array('multiple'=>true),
+			'sql'					  => "blob NULL"
 		),
 		'cssID' => array
 		(
@@ -258,17 +304,15 @@ class tl_boxes4ward_article extends Backend
 	 */
 	public function getModules()
 	{
-		$arrModuls = array();
-		$objModuls = \ModuleModel::findBy('type','boxes4ward');
+		$arrModules = array();
+		$objModules = \ModuleModel::findBy('type','boxes4ward');
 
-		if(!$objModuls->numRows) return array();
-
-		while($objModuls->next())
+		while($objModules->next())
 		{
-			$arrModuls[$objModuls->id] = $objModuls->name;
+			$arrModules[$objModules->id] = $objModules->name;
 		}
 
-		return $arrModuls;
+		return $arrModules;
 	}
 
 
@@ -292,7 +336,7 @@ class tl_boxes4ward_article extends Backend
 		}
 		else
 		{
-			$objArticle = \Contao\ArticleModel::findByPk(Input::get('id'));
+			$objArticle = \ArticleModel::findByPk(Input::get('id'));
 			$boxes4wardID = $objArticle->pid;
 		}
 
@@ -391,7 +435,7 @@ class tl_boxes4ward_article extends Backend
 		}
 
 		// Update the database
-		$objArticle = \Boxes4ward\Boxes4wardArticleModel::findByPk($intId);
+		$objArticle = \Boxes4ward\Model\Article::findByPk($intId);
 		$objArticle->published = ($blnVisible ? '1' : '');
 		$objArticle->save();
 

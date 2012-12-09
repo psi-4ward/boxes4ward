@@ -1,5 +1,4 @@
-<?php if (!defined('TL_ROOT')) die('You cannot access this file directly!');
-
+<?php
 
 /**
  * Boxes4ward
@@ -13,24 +12,23 @@
  * @see https://github.com/psi-4ward/boxes4ward
  */
 
-/**
- * Register the classes
- */
+
+// Register the namespace
+ClassLoader::addNamespace('Psi');
+
+// Register the classes
 ClassLoader::addClasses(array
 (
 	// Boxes4ward
-	'Boxes4ward\ModuleBoxes4ward' => 'system/modules/boxes4ward/classes/ModuleBoxes4ward.php',
+	'Psi\Boxes4ward\Module\Boxes4ward' 	=> 'system/modules/boxes4ward/Module/Boxes4ward.php',
 
 	// Models
-	'Boxes4ward\Boxes4wardArticleModel'  => 'system/modules/boxes4ward/models/Boxes4wardArticleModel.php',
-	'Boxes4ward\Boxes4wardCategoryModel'  => 'system/modules/boxes4ward/models/Boxes4wardCategoryModel.php',
+	'Psi\Boxes4ward\Model\Article'  	=> 'system/modules/boxes4ward/Model/Article.php',
+	'Psi\Boxes4ward\Model\Category'  	=> 'system/modules/boxes4ward/Model/Category.php',
 ));
 
-
-/**
- * Register the templates
- */
+// Register the templates
 TemplateLoader::addFiles(array
 (
-	'mod_boxes4ward' => 'system/modules/boxes4ward/templates',
+	'mod_boxes4ward' 					=> 'system/modules/boxes4ward/templates',
 ));

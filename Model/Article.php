@@ -1,7 +1,5 @@
 <?php
-namespace Boxes4ward;
-
-if(!defined('TL_ROOT')) {die('You cannot access this file directly!');}
+namespace Psi\Boxes4ward\Model;
 
 /**
  * @copyright 4ward.media 2012 <http://www.4wardmedia.de>
@@ -9,7 +7,7 @@ if(!defined('TL_ROOT')) {die('You cannot access this file directly!');}
  */
 
 
-class Boxes4wardArticleModel extends \Model
+class Article extends \Model
 {
 
 	/**

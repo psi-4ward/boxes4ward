@@ -1,5 +1,4 @@
-<?php if (!defined('TL_ROOT')) die('You cannot access this file directly!');
-
+<?php
 
 /**
  * Boxes4ward
@@ -21,9 +20,8 @@ $GLOBALS['BE_MOD']['content']['boxes4ward'] = array(
 );
 
 
-
 // FE-Modules
-$GLOBALS['FE_MOD']['miscellaneous']['boxes4ward'] = 'ModuleBoxes4ward';
+$GLOBALS['FE_MOD']['miscellaneous']['boxes4ward'] = 'Boxes4ward\Module\Boxes4ward';
 
 
 // add news archive permissions
