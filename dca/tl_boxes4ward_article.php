@@ -307,6 +307,7 @@ class tl_boxes4ward_article extends Backend
 		$arrModules = array();
 		$objModules = \ModuleModel::findBy('type','boxes4ward');
 
+		if(!$objModules) return array();
 		while($objModules->next())
 		{
 			$arrModules[$objModules->id] = $objModules->name;
