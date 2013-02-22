@@ -29,7 +29,7 @@ class Boxes4ward extends \Module
 	{
 		if (TL_MODE == 'BE')
 		{
-			$objTemplate = new BackendTemplate('be_wildcard');
+			$objTemplate = new \BackendTemplate('be_wildcard');
 
 			$objTemplate->wildcard = '### Boxes4ward ###';
 			$objTemplate->title = $this->headline;
