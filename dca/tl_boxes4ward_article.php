@@ -328,14 +328,14 @@ class tl_boxes4ward_article extends Backend
 			return;
 		}
 
-		// find tl_news4archiv.id
+		// find tl_boxes4archiv.id
 		if(!$this->Input->get('act') || in_array($this->Input->get('act'),array('create','select','editAll','overrideAll')))
 		{
 			$id= $this->Input->get('id');
 		}
 		else
 		{
-			$objArticle = $this->Database->prepare('SELECT pid FROM tl_news4ward_article WHERE id=?')->execute($this->Input->get('id'));
+			$objArticle = $this->Database->prepare('SELECT pid FROM tl_boxes4ward_article WHERE id=?')->execute($this->Input->get('id'));
 			$id = $objArticle->pid;
 		}
 
