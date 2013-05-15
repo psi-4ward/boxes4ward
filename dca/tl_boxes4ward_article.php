@@ -329,9 +329,9 @@ class tl_boxes4ward_article extends Backend
 		}
 
 		// find tl_boxes4archiv.id
-		if(!$this->Input->get('act') || in_array($this->Input->get('act'),array('create','select','editAll','overrideAll')))
+		if(!$this->Input->get('act') || in_array($this->Input->get('act'),array('paste', 'create','select','editAll','overrideAll')))
 		{
-			$id= $this->Input->get('id');
+			$id = $this->Input->get('id');
 		}
 		else
 		{
