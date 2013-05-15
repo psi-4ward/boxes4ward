@@ -16,3 +16,4 @@
 
 $GLOBALS['TL_LANG']['tl_user_group']['boxes4ward_legend'] = 'Contentboxes access rights';
 $GLOBALS['TL_LANG']['tl_user_group']['boxes4ward'] = array('Contentboxes categories','The users gain access to the selected contentboxes categories.');
+$GLOBALS['TL_LANG']['tl_user_group']['boxes4ward_newp'] = array('Contentboxes rights','The users gain access to create new contentboxes.');

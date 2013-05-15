@@ -16,3 +16,4 @@
 
 $GLOBALS['TL_LANG']['tl_user_group']['boxes4ward_legend'] = 'Inhaltsboxen Berechtigungen';
 $GLOBALS['TL_LANG']['tl_user_group']['boxes4ward'] = array('Inhaltsboxen Kategorien','Die Benuter erhalten Zugriff auf die gewählten Inhaltsboxen-Kategorien');
+$GLOBALS['TL_LANG']['tl_user_group']['boxes4ward_newp'] = array('Inhaltsboxen-Rechte','Der Benutzer kann Inhaltsboxen anlegen und verändern.');

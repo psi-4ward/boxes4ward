@@ -318,11 +318,10 @@ class tl_boxes4ward_article extends Backend
 
 
 	/**
-	 * Check permissions to edit table tl_news4ward_article
+	 * Check permissions to edit table tl_boxes4ward_article
 	 */
 	public function checkPermission()
 	{
-
 		if ($this->User->isAdmin)
 		{
 			// allow admins
@@ -330,20 +329,20 @@ class tl_boxes4ward_article extends Backend
 		}
 
 		// find tl_news4archiv.id
-		if(!Input::get('act') || in_array(Input::get('act'),array('create','select','editAll','overrideAll')))
+		if(!$this->Input->get('act') || in_array($this->Input->get('act'),array('create','select','editAll','overrideAll')))
 		{
-			$boxes4wardID = Input::get('id');
-
+			$id= $this->Input->get('id');
 		}
 		else
 		{
-			$objArticle = \ArticleModel::findByPk(Input::get('id'));
-			$boxes4wardID = $objArticle->pid;
+			$objArticle = $this->Database->prepare('SELECT pid FROM tl_news4ward_article WHERE id=?')->execute($this->Input->get('id'));
+			$id = $objArticle->pid;
 		}
 
-		if(is_array($this->User->boxes4ward) && count($this->User->boxes4ward) > 0 && in_array($boxes4wardID,$this->User->boxes4ward)) return;
+		// check archive rights
+		if(is_array($this->User->boxes4ward) && count($this->User->boxes4ward) > 0 && in_array($id,$this->User->boxes4ward)) return;
 
-		$this->log('Not enough permissions to '.Input::get('act').' boxes4ward category ID "'.$boxes4wardID.'"', 'tl_boxes4ward_article checkPermission', TL_ERROR);
+		$this->log('Not enough permissions to '.$this->Input->get('act').' boxes4ward archive ID "'.$id.'"', 'tl_boxes4ward_article checkPermission', TL_ERROR);
 		$this->redirect('contao/main.php?act=error');
 	}
 
