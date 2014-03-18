@@ -131,17 +131,14 @@ class Boxes4ward extends \Module
 			// fetch content elements and generate it
 			$objCte = $this->Database->prepare("SELECT id FROM tl_content WHERE pid=?" . (!BE_USER_LOGGED_IN ? " AND invisible=''" : "") . " AND ptable='tl_boxes4ward_article' ORDER BY sorting")
 									 ->execute($arrArticle['id']);
-			$strContentTemp = '';
 			while ($objCte->next())
 			{
 				$strContent .= $this->getContentElement($objCte->id);
 			}
-			if(strlen($strContentTemp))
+			if(strlen($strContent))
 			{
 				// add a div holding css id / classes
-				$strContent .= sprintf('<div%s class="%s">', $id, $class);
-				$strContent .= $strContentTemp;
-				$strContent .= '</div>';
+				$strContent = sprintf('<div%s class="%s">', $id, $class) . $strContent . '</div>';
 			}
 
 		}
