@@ -34,7 +34,10 @@
     "contao": {
       "sources": {
         "": "system/modules/boxes4ward"
-      }
+      },
+      "runonce": [
+        "runonce/30update.php"
+      ]
     }
   }
 }
