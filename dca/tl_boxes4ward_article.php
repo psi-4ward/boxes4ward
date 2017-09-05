@@ -120,7 +120,7 @@ $GLOBALS['TL_DCA']['tl_boxes4ward_article'] = array
 	'palettes' => array
 	(
 		'__selector__'					=> array('weekdayFilter','monthFilter'),
-		'default'						=> '{name_legend},name,module_id;{config_legend},pages,reversePages,inheritPages;{weekday_legend:hide},weekdayFilter;{month_legend:hide},monthFilter;{expert_legend:hide},cssID;{publish_legend},published,start,stop',
+		'default'						=> '{name_legend},name,module_id;{config_legend},pages,reversePages,inheritPages;{news_legend},news;{weekday_legend:hide},weekdayFilter;{month_legend:hide},monthFilter;{expert_legend:hide},cssID;{publish_legend},published,start,stop',
 	),
 
 	// Subpalettes
@@ -165,6 +165,15 @@ $GLOBALS['TL_DCA']['tl_boxes4ward_article'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_boxes4ward_article']['pages'],
 			'inputType'               => 'pageTree',
 			'eval'                    => array("multiple"=>true, 'fieldType'=>'checkbox'),
+			'sql'					  => 'blob NULL'
+		),
+		'news' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_boxes4ward_article']['news'],
+			'inputType'               => 'checkboxWizard',
+			'options_callback'		  => array('tl_boxes4ward_article', 'getNewsList'),
+			'onsubmit_callback'       => array(array('tl_boxes4ward_article', 'getNewsList')),
+			'eval'                    => array('multiple'=>true),
 			'sql'					  => 'blob NULL'
 		),
 		'module_id' => array
@@ -442,4 +451,14 @@ class tl_boxes4ward_article extends Backend
 		$this->createNewVersion('tl_boxes4ward_article', $intId);
 	}
 
+	public function getNewsList()
+	{
+		$arrNews = array();
+		$objNews = $this->Database->prepare("SELECT DISTINCT tl_news.id, headline, date, published, start, stop, tl_news_archive.title AS archive FROM tl_news JOIN tl_news_archive ON tl_news.pid = tl_news_archive.id ORDER BY date DESC")->execute();
+		while($objNews->next()) {
+			$arrNews[$objNews->id] = date($GLOBALS['TL_CONFIG']['datimFormat'], $objNews->date) . ' <b>' . $objNews->headline . '</b> [' . $objNews->archive . ']';
+		}
+		return $arrNews;
+
+	}
 }
