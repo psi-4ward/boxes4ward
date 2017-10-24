@@ -170,10 +170,10 @@ $GLOBALS['TL_DCA']['tl_boxes4ward_article'] = array
 		'news' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_boxes4ward_article']['news'],
-			'inputType'               => 'checkboxWizard',
+			'inputType'               => 'select',
 			'options_callback'		  => array('tl_boxes4ward_article', 'getNewsList'),
 			'onsubmit_callback'       => array(array('tl_boxes4ward_article', 'getNewsList')),
-			'eval'                    => array('multiple'=>true),
+			'eval'                    => array('multiple'=>true, 'chosen'=>true),
 			'sql'					  => 'blob NULL'
 		),
 		'module_id' => array
