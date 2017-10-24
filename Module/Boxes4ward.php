@@ -86,9 +86,11 @@ class Boxes4ward extends \Module
 				continue;
 			}
 
-			if ($objNews = \NewsModel::findByIdOrAlias(\Input::get('items'))) {
-				$objArticle->news = deserialize($objArticle->news, true);
-				if (!(in_array($objNews->id, $objArticle->news))) continue;
+			if ($objArticle->newsFilter) {
+				if ($objNews = \NewsModel::findByIdOrAlias(\Input::get('items'))) {
+					$objArticle->news = deserialize($objArticle->news, true);
+					if (!(in_array($objNews->id, $objArticle->news))) continue;
+				}
 			}
 
 			// check for month-filter

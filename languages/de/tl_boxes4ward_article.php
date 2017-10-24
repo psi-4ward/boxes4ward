@@ -21,6 +21,7 @@ $GLOBALS['TL_LANG']['tl_boxes4ward_article']['module_id']		= array('Modul', 'Der
 $GLOBALS['TL_LANG']['tl_boxes4ward_article']['pages']			= array('Seiten', 'Auf diesen Seiten wird die Box angezeigt.');
 $GLOBALS['TL_LANG']['tl_boxes4ward_article']['reversePages']	= array('Seitenauswahl-Logik umkehren', 'Ausgewählte Seiten werden *nicht* angezeigt. Auswahl hier und keine der Seiten aktiv ist gleichbedeutend mit "alle Seiten".');
 $GLOBALS['TL_LANG']['tl_boxes4ward_article']['inheritPages']	= array('Unterseiten wählen', 'Die Box wird zusätzlich auf allen Unterseiten angezeigt.');
+$GLOBALS['TL_LANG']['tl_boxes4ward_article']['newsFilter']      = array('Auf Nachrichten-Beiträge beschränken', 'Die Box wird nur bei den gewählten Nachrichten-Beiträgen angezeigt.');
 $GLOBALS['TL_LANG']['tl_boxes4ward_article']['news']			= array('Nachrichten', 'Nur wirksam bei Nachrichtenlesern: Nur für diese Nachrichten wird die Box angezeigt.');
 $GLOBALS['TL_LANG']['tl_boxes4ward_article']['weekdayFilter']	= array('Auf Wochentage beschränken', 'Die Box wird nur an den gewählten Wochentagen angezeigt.');
 $GLOBALS['TL_LANG']['tl_boxes4ward_article']['weekdays']		= array('Wochentage', 'Wählen Sie hier die Wochentage aus, an denen die Box angezeigt werden soll.');
