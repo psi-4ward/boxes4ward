@@ -119,13 +119,14 @@ $GLOBALS['TL_DCA']['tl_boxes4ward_article'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'__selector__'					=> array('weekdayFilter','monthFilter'),
-		'default'						=> '{name_legend},name,module_id;{config_legend},pages,reversePages,inheritPages;{news_legend},news;{weekday_legend:hide},weekdayFilter;{month_legend:hide},monthFilter;{expert_legend:hide},cssID;{publish_legend},published,start,stop',
+		'__selector__'					=> array('newsFilter','weekdayFilter','monthFilter'),
+		'default'						=> '{name_legend},name,module_id;{config_legend},pages,reversePages,inheritPages;{news_legend},newsFilter;{weekday_legend:hide},weekdayFilter;{month_legend:hide},monthFilter;{expert_legend:hide},cssID;{publish_legend},published,start,stop',
 	),
 
 	// Subpalettes
 	'subpalettes' => array
 	(
+		'newsFilter'					=> 'news',
 		'weekdayFilter'					=> 'weekdays',
 		'monthFilter'					=> 'monthes',
 	),
@@ -167,13 +168,22 @@ $GLOBALS['TL_DCA']['tl_boxes4ward_article'] = array
 			'eval'                    => array("multiple"=>true, 'fieldType'=>'checkbox'),
 			'sql'					  => 'blob NULL'
 		),
+		'newsFilter' => array
+		(
+			'label'						=> &$GLOBALS['TL_LANG']['tl_boxes4ward_article']['newsFilter'],
+			'exclude'					=> true,
+			'filter'					=> true,
+			'inputType'					=> 'checkbox',
+			'eval'						=> array('submitOnChange'=>true),
+			'sql'					  => "char(1) NOT NULL default ''"
+		),
 		'news' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_boxes4ward_article']['news'],
-			'inputType'               => 'checkboxWizard',
+			'inputType'               => 'select',
 			'options_callback'		  => array('tl_boxes4ward_article', 'getNewsList'),
 			'onsubmit_callback'       => array(array('tl_boxes4ward_article', 'getNewsList')),
-			'eval'                    => array('multiple'=>true),
+			'eval'                    => array('multiple'=>true, 'chosen'=>true),
 			'sql'					  => 'blob NULL'
 		),
 		'module_id' => array
