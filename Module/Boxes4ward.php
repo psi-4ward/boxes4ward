@@ -86,10 +86,11 @@ class Boxes4ward extends \Module
 				continue;
 			}
 
-			if ($objNews = \NewsModel::findByIdOrAlias(\Input::get('items'))) {
-				$objArticle->news = deserialize($objArticle->news, true);
-				if (!(in_array($objNews->id, $objArticle->news))) continue;
-			}
+			// Frank Hoppe: Commented out because module is not automatically displayed on message reader pages
+			//if ($objNews = \NewsModel::findByIdOrAlias(\Input::get('items'))) {
+			//	$objArticle->news = deserialize($objArticle->news, true);
+			//	if (!(in_array($objNews->id, $objArticle->news))) continue;
+			//}
 
 			// check for month-filter
 			if($objArticle->monthFilter && !(($monthes = deserialize($objArticle->monthes)) && in_array(date('n')-1,$monthes)))
